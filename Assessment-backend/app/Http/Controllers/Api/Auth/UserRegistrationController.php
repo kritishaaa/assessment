@@ -19,7 +19,7 @@ class UserRegistrationController extends Controller
         $data = $request->validated();
         $user = User::create($data);
 
-        // event(new Registered($user));
+        event(new Registered($user));
         return response()->noContent();
     }
 }
