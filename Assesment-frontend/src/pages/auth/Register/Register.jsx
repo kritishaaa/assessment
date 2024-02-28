@@ -1,25 +1,32 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axiosConfig from "src/config/axios.config";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
+  const notify = (msg) => toast(msg);
 
+  const navigate = useNavigate();
   async function handleRegistration(event) {
     event.preventDefault(); // Prevent default form submission
-    const { data } = await axios.post(
-      "https://2bf6-27-34-65-64.ngrok-free.app/api/register",
-      {
+    try {
+      const { data } = await axiosConfig.post("/register", {
         name,
         email,
         password,
         password_confirmation: confirmPassword,
-      }
-    );
-    console.log(data);
+      });
+      notify("Signup  successful!");
+      navigate("/login");
+      console.log(data);
+    } catch (error) {
+      notify("Error Occured! Please try again.");
+    }
   }
 
   return (
