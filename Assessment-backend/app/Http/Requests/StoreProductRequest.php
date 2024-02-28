@@ -43,7 +43,6 @@ class StoreProductRequest extends FormRequest
                 "unique:product_categories,slug,NULL,id,deleted_at,NULL",
                 new ValidSlug,
             ],
-            'category_id' => 'nullable|exists:product_categories,id,deleted_at,NULL',
             'categories' => 'required|array',
             'categories.*' => 'required|exists:product_categories,id',
             'thumbnail' => 'required|image|mimes:jpg,png,jpeg|max:2048',
