@@ -36,16 +36,13 @@ class UpdateProductRequest extends FormRequest
     {
         $productId = $this->route()->originalParameter('product');
         return [
-            'name'=> 'required', 'string', 'max:255',
+            'name'=> ['required', 'string', 'max:255'],
             'slug' => [
-                'required',
                 'string',
                 'max:255',
                 new ValidSlug,
-                "unique:quizzes,slug,{$productId},id,deleted_at,NULL",
+                "unique:products,slug,{$productId},id,deleted_at,NULL",
             ],
-            'category_id' => 'nullable|exists:product_categories,id,deleted_at,NULL',
-            'thumbnail' => 'required|image|mimes:jpg,png,jpeg|max:2048',
             'description' => 'required|string|max:5000',
             'quantity' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',

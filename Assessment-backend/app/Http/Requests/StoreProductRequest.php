@@ -45,7 +45,6 @@ class StoreProductRequest extends FormRequest
             ],
             'categories' => 'required|array',
             'categories.*' => 'required|exists:product_categories,id',
-            'thumbnail' => 'required|image|mimes:jpg,png,jpeg|max:2048',
             'description' => 'required|string|max:5000',
             'quantity' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
