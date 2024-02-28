@@ -10,7 +10,7 @@ Route::post('/register', UserRegistrationController::class)
             ->middleware('guest')
             ->name('register');
 
-Route::get('/login', UserLoginController::class)
+Route::post('/login', UserLoginController::class)
             ->middleware('guest')
             ->name('login');
 
