@@ -67,10 +67,15 @@ class ProductRepository
         if (isset($data['categories'])) {
             $categoryIds = is_array($data['categories']) ? $data['categories'] : explode(',', $data['categories']);
             $query->whereHas('categories', function ($q) use ($categoryIds) {
-                $q->whereIn('product_categories.id', $categoryIds); 
+                $q->whereIn('product_categories.id', $categoryIds);
             });
         }
-        
+
+        if ($data['sort'] === 'oldest') {
+            $query->oldest();
+        } else {
+            $query->latest();
+        }
         return $query->paginate(10);
     }
 
