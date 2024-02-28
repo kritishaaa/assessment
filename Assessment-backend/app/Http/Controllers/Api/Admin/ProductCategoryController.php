@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductCategoryRequest;
 use App\Http\Requests\UpdateProductCategoryRequest;
@@ -35,7 +36,7 @@ class ProductCategoryController extends Controller
         $data = $request->validated();
         $productCategory = ProductCategory::create($data);
 
-        return new ProductCategoryResource($productCategory);
+        return (new ProductCategoryResource($productCategory))->additional(ResponseHelper::stored());
     }
 
     /**
@@ -61,7 +62,7 @@ class ProductCategoryController extends Controller
         $data = $request->validated();
         $productCategory->update($data);
 
-        return new ProductCategoryResource($productCategory);
+        return (new ProductCategoryResource($productCategory))->additional(ResponseHelper::updated($productCategory));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\ProductRepository;
 use App\Http\Requests\FilterProductRequest;
@@ -49,7 +50,7 @@ class ProductController extends Controller
         $data = $request->validated();
         $product = $this->productRepository->store($data);
 
-        return new ProductResource($product);
+        return (new ProductResource($product))->additional(ResponseHelper::stored());
     }
 
     /**
@@ -75,7 +76,7 @@ class ProductController extends Controller
         $data = $request->validated();
         $product = $this->productRepository->update($product, $data);
 
-        return new ProductResource($product);
+        return (new ProductResource($product))->additional(ResponseHelper::updated($product));
     }
 
      /**
