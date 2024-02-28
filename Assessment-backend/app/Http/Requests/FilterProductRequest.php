@@ -24,7 +24,7 @@ class FilterProductRequest extends FormRequest
         return [
             'name' => 'string|max:255',
             'status' => 'boolean',
-            'category_id' => 'exists:product_categories,id',
+            'categories' => 'exists:product_categories,id',
         ];
     }
 }

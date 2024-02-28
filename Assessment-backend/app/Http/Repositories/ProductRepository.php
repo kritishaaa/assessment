@@ -64,11 +64,13 @@ class ProductRepository
             $query->where('status', $data['status']);
         }
 
-        if (isset($data['category_id'])) {
-            $categoryIds = is_array($data['category_id']) ? $data['category_id'] : explode(',', $data['category_id']);
-            $query->whereIn('category_id', $categoryIds);
+        if (isset($data['categories'])) {
+            $categoryIds = is_array($data['categories']) ? $data['categories'] : explode(',', $data['categories']);
+            $query->whereHas('categories', function ($q) use ($categoryIds) {
+                $q->whereIn('product_categories.id', $categoryIds); 
+            });
         }
-
+        
         return $query->paginate(10);
     }
 
