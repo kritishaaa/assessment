@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\Product;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 
 class ProductRepository
@@ -46,4 +47,29 @@ class ProductRepository
 
         return $product;
     }
+
+    /**
+     * @param array $data
+     * @return LengthAwarePaginator
+     */
+    public function getFilteredProduct($data): LengthAwarePaginator
+    {
+        $query = Product::with('categories:id,name');
+
+        if (isset($data['title'])) {
+            $query->where('title', 'like', '%' . $data['title'] . '%');
+        }
+
+        if (isset($data['status'])) {
+            $query->where('status', $data['status']);
+        }
+
+        if (isset($data['category_id'])) {
+            $categoryIds = is_array($data['category_id']) ? $data['category_id'] : explode(',', $data['category_id']);
+            $query->whereIn('category_id', $categoryIds);
+        }
+
+        return $query->paginate(10);
+    }
+
 }
