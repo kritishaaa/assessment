@@ -34,7 +34,7 @@ class ProductRepository
      * @return Product
      */
     public function update(Product $product, array $data): Product
-    {        
+    {
         $product->categories()->sync($data['categories']);
         $product->update($data);
 
@@ -64,10 +64,12 @@ class ProductRepository
             });
         }
 
-        if ($data['sort'] === 'oldest') {
-            $query->oldest();
-        } else {
-            $query->latest();
+        if (isset($data['sort'])) {
+            if ($data['sort'] === 'oldest') {
+                $query->oldest();
+            } else {
+                $query->latest();
+            }
         }
         return $query->paginate(10);
     }
