@@ -25,6 +25,7 @@ class FilterProductRequest extends FormRequest
             'name' => 'string|max:255',
             'status' => 'boolean',
             'categories' => 'exists:product_categories,id',
+            'sort' => 'nullable|in:latest,oldest',
         ];
     }
 }
