@@ -14,8 +14,6 @@ class ProductRepository
      */
     public function store(array $data): Product
     {
-        $name = date('ymd') . time() . '.' . $data['thumbnail']->extension();
-        $data['thumbnail'] = $data['thumbnail']->storeAs('images/products', $name);
         $product = Product::create($data);
         $product->categories()->sync($data['categories']);
         return $product->fresh();
@@ -36,12 +34,7 @@ class ProductRepository
      * @return Product
      */
     public function update(Product $product, array $data): Product
-    {
-        if (isset($data['thumbnail'])) {
-            Storage::delete('app/images/products/' . $product->thumbnail);
-            $name = date('ymd') . time() . '.' . $data['thumbnail']->extension();
-            $data['thumbnail'] = $data['thumbnail']->storeAs('images/products', $name);
-        }
+    {        
         $product->categories()->sync($data['categories']);
         $product->update($data);
 
