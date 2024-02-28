@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\ProductCategoryController;
+use App\Http\Controllers\Api\Admin\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +25,5 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:sanctum'], function () {
 
     Route::apiResource('/product-categories', ProductCategoryController::class);
+    Route::apiResource('/products', ProductController::class);
 });
