@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\ProductRepository;
+use App\Http\Requests\FilterProductRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class ProductController extends Controller
@@ -24,10 +26,16 @@ class ProductController extends Controller
 
     /**
      * Display a listing of the resource.
+     * 
+     * @param FilterProductRequest $request
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(FilterProductRequest $request): AnonymousResourceCollection
     {
-        
+        $data = $request->validated();
+        $products = $this->productRepository->getFilteredProduct($data);
+
+        return ProductResource::collection($products);
     }
 
     /**
