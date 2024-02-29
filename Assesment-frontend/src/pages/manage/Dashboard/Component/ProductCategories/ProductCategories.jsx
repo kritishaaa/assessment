@@ -1,9 +1,11 @@
 import { useState } from "react";
 import ProductCategoriesTable from "./component/ProductCategoriesTable";
 import SubHeader from "./component/SubHeader";
-import AddProductCategories from "./component/AddProductCategories";
-
+import AddProductCategories from "./component/AddEditProductCategories";
+import { useParams } from "react-router-dom";
 const ProductCategories = () => {
+  const { id } = useParams();
+
   const [isAddProductCategories, setIsAddProductCategories] = useState(false);
 
   return (
@@ -11,10 +13,12 @@ const ProductCategories = () => {
       <SubHeader
         setIsAddProductCategories={setIsAddProductCategories}
         isAddProductCategories={isAddProductCategories}
+        isEdit={Boolean(id)}
       />
-      {isAddProductCategories ? (
+      {isAddProductCategories || id ? (
         <AddProductCategories
           setIsAddProductCategories={setIsAddProductCategories}
+          id={id}
         />
       ) : (
         <>
