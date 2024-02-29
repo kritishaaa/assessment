@@ -1,11 +1,26 @@
-import ProductTable from "./component/ProductCategoriesTable";
+import { useState } from "react";
+import ProductCategoriesTable from "./component/ProductCategoriesTable";
 import SubHeader from "./component/SubHeader";
+import AddProductCategories from "./component/AddProductCategories";
 
 const ProductCategories = () => {
+  const [isAddProductCategories, setIsAddProductCategories] = useState(false);
+
   return (
     <>
-      <SubHeader />
-      <ProductTable />
+      <SubHeader
+        setIsAddProductCategories={setIsAddProductCategories}
+        isAddProductCategories={isAddProductCategories}
+      />
+      {isAddProductCategories ? (
+        <AddProductCategories
+          setIsAddProductCategories={setIsAddProductCategories}
+        />
+      ) : (
+        <>
+          <ProductCategoriesTable />
+        </>
+      )}
     </>
   );
 };
