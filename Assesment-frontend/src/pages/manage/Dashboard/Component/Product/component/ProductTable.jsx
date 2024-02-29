@@ -1,26 +1,27 @@
 import React, { useState } from "react";
 import axiosConfig from "src/config/axios.config";
-const CategoriesTable = () => {
+const ProductTable = () => {
   const [data, setData] = useState([
-    // { id: 1, name: "John Doe" },
-    // { id: 2, name: "Jane Smith" },
-    // { id: 3, name: "Bob Johnson" },
-    // Add more data as needed
   ]);
-  React.useEffect(() => {
-    const { data: categoriesData } = axiosConfig.get(
-      "/admin/product-categories",
+  async function getProduct(){
+    const { data: productData } = await axiosConfig.get(
+      "/admin/products",
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
-    console.log(categoriesData);
-    setData(categoriesData?.data ?? []);
+    console.log(productData);
+    setData(productData?.data ?? []);
+  }
+
+  React.useEffect(() => {
+    getProduct();
   }, []);
+
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5; // Number of items per page
+  const pageSize = 10; // Number of items per page
 
   // Calculate indexes for pagination
   const lastIndex = currentPage * pageSize;
@@ -74,4 +75,4 @@ const CategoriesTable = () => {
   );
 };
 
-export default CategoriesTable;
+export default ProductTable;
