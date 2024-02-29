@@ -79,7 +79,7 @@ const ProductCategoriesTable = () => {
               <td className="px-6 py-4 whitespace-nowrap">
                 <button
                   className="text-indigo-600 hover:text-indigo-900"
-                  onClick={() => navigate(`/dashboard/${row.id}/?edit=true`)}
+                  onClick={() => navigate(`/dashboard/${row.id}/?editCategories=true`)}
                 >
                   Edit
                 </button>

@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Product from "./Component/Product/Product";
 import ProductCategories from "./Component/ProductCategories/ProductCategories";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState("product-categories");
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    if (searchParams.get("editCategories") === "true") {
+      setSelectedTab("product-categories");
+    } else if (searchParams.get("editProduct") === "true") {
+      setSelectedTab("product");
+    }
+  }, [searchParams]);
 
   function handleTabChange(tab) {
     setSelectedTab(tab);

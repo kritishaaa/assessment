@@ -54,7 +54,7 @@ const AddEditProductCategories = ({ setIsAddProductCategories, id }) => {
     const { data } = await axiosConfig.get(`/admin/product-categories/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    setName(data.name);
+    setName(data?.data.name);
     setSlug(data.slug);
   };
 
