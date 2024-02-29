@@ -74,13 +74,7 @@ class ProductCategoryController extends Controller
      */
     public function destroy(ProductCategory $productCategory): Response|JsonResponse
     {
-
-        if ($productCategory->products()->exists()) {
-            return response()->json(['error' => 'Could not delete the category.']);
-        }
-
         $productCategory->delete();
-
         return response()->noContent();
     }
 }
