@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import axiosConfig from "src/config/axios.config";
 const ProductCategoriesTable = () => {
-  const [data, setData] = useState([
+  const [data, setData] = useState([]);
 
-  ]);
-
-  async function getProductCategories(){
+  async function getProductCategories() {
     const { data: productCategoriesData } = await axiosConfig.get(
       "/admin/product-categories",
       {
@@ -27,8 +25,8 @@ const ProductCategoriesTable = () => {
   // Calculate indexes for pagination
   const lastIndex = currentPage * pageSize;
   const firstIndex = lastIndex - pageSize;
-  const currentData = data.slice(firstIndex, lastIndex);
-
+  const currentData = data;
+  
   // Function to handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);

@@ -10,6 +10,9 @@ const AddProductCategories = ({ setIsAddProductCategories }) => {
       const response = await axiosConfig.post("/admin/product-categories", {
         name,
         slug,
+      }, 
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       console.log(response);
       setIsAddProductCategories(false);
