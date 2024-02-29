@@ -1,19 +1,42 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axiosConfig from "src/config/axios.config";
+import { toast } from "react-toastify";
+
 const ProductCategoriesTable = () => {
+  const navigate = useNavigate();
+
   const [data, setData] = useState([]);
+  const notify = (msg) => toast(msg);
 
   async function getProductCategories() {
-    const { data: productCategoriesData } = await axiosConfig.get(
-      "/admin/product-categories",
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    console.log(productCategoriesData);
-    setData(productCategoriesData?.data ?? []);
+    try {
+      const { data: productCategoriesData } = await axiosConfig.get(
+        "/admin/product-categories",
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      console.log(productCategoriesData);
+      setData(productCategoriesData?.data ?? []);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
+  async function deleteProductCategory(id) {
+    try {
+      await axiosConfig.delete(`/admin/product-categories/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      getProductCategories();
+      notify("Product category deleted successfully!");
+    } catch (error) {
+      console.log(error);
+      notify("Error deleting product category!");
+    }
+  }
+  
   React.useEffect(() => {
     getProductCategories();
   }, []);
@@ -26,7 +49,7 @@ const ProductCategoriesTable = () => {
   const lastIndex = currentPage * pageSize;
   const firstIndex = lastIndex - pageSize;
   const currentData = data;
-  
+
   // Function to handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -43,13 +66,30 @@ const ProductCategoriesTable = () => {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Name
             </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {currentData.map((row) => (
-            <tr key={row.id}>
+            <tr key={row.id} className="hover:bg-slate-50 ">
               <td className="px-6 py-4 whitespace-nowrap">{row.id}</td>
               <td className="px-6 py-4 whitespace-nowrap">{row.name}</td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <button
+                  className="text-indigo-600 hover:text-indigo-900"
+                  onClick={() => navigate(`/dashboard/${row.id}/?edit=true`)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="text-red-600 hover:text-red-900 mx-2"
+                  onClick={() => deleteProductCategory(row.id)}
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

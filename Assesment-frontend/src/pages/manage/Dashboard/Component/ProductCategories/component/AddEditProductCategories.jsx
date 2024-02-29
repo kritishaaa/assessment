@@ -1,25 +1,68 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+import React, { useState } from "react";
 import axiosConfig from "src/config/axios.config";
+import { useNavigate } from "react-router-dom";
 
-const AddProductCategories = ({ setIsAddProductCategories }) => {
+const AddEditProductCategories = ({ setIsAddProductCategories, id }) => {
+  const navigate = useNavigate();
+  const isEdit = Boolean(id);
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const handleAddProductCategories = async (event) => {
     event.preventDefault();
     try {
-      const response = await axiosConfig.post("/admin/product-categories", {
-        name,
-        slug,
-      }, 
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const response = await axiosConfig.post(
+        "/admin/product-categories",
+        {
+          name,
+          slug,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       console.log(response);
       setIsAddProductCategories(false);
+      navigate("/dashboard/");
     } catch (error) {
       console.error(error);
     }
   };
+
+  const handleUpdateProductCategories = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axiosConfig.put(
+        `/admin/product-categories/${id}`,
+        {
+          name,
+          slug,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      console.log(response);
+      setIsAddProductCategories(false);
+      navigate("/dashboard/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getProductCategoryById = async () => {
+    const { data } = await axiosConfig.get(`/admin/product-categories/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    setName(data.name);
+    setSlug(data.slug);
+  };
+
+  React.useEffect(() => {
+    if (isEdit && id) {
+      getProductCategoryById();
+    }
+  }, []);
 
   return (
     <section className="container mx-auto">
@@ -70,7 +113,11 @@ const AddProductCategories = ({ setIsAddProductCategories }) => {
             <button
               // type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 p-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={handleAddProductCategories}
+              onClick={
+                isEdit
+                  ? handleUpdateProductCategories
+                  : handleAddProductCategories
+              }
             >
               Save 📥
             </button>
@@ -81,4 +128,4 @@ const AddProductCategories = ({ setIsAddProductCategories }) => {
   );
 };
 
-export default AddProductCategories;
+export default AddEditProductCategories;
