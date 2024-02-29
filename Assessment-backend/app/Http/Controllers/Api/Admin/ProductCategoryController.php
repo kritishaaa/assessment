@@ -8,6 +8,7 @@ use App\Http\Requests\StoreProductCategoryRequest;
 use App\Http\Requests\UpdateProductCategoryRequest;
 use App\Http\Resources\ProductCategoryResource;
 use App\Models\ProductCategory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
@@ -36,7 +37,7 @@ class ProductCategoryController extends Controller
         $data = $request->validated();
         $productCategory = ProductCategory::create($data);
 
-        return (new ProductCategoryResource($productCategory))->additional(ResponseHelper::stored());
+        return(new ProductCategoryResource($productCategory))->additional(ResponseHelper::stored());
     }
 
     /**
@@ -62,17 +63,22 @@ class ProductCategoryController extends Controller
         $data = $request->validated();
         $productCategory->update($data);
 
-        return (new ProductCategoryResource($productCategory))->additional(ResponseHelper::updated($productCategory));
+        return(new ProductCategoryResource($productCategory))->additional(ResponseHelper::updated($productCategory));
     }
 
     /**
      * Remove the specified resource from storage.
      * 
      * @param ProductCategory $productCategory
-     * @return Response
+     * @return Response|JsonResponse
      */
-    public function destroy(ProductCategory $productCategory): Response
+    public function destroy(ProductCategory $productCategory): Response|JsonResponse
     {
+
+        if ($productCategory->products()->exists()) {
+            return response()->json(['error' => 'Could not delete the category.']);
+        }
+
         $productCategory->delete();
 
         return response()->noContent();
